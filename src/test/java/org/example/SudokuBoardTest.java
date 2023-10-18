@@ -1,52 +1,79 @@
 package org.example;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 
 public class SudokuBoardTest {
 
-    @Test
-    void ConstructorDoesNotThrow() {
-        Assertions.assertDoesNotThrow(() -> {
-            new SudokuBoard();
-        });
+    private SudokuBoard sudokuBoard;
+
+    @BeforeEach
+    void beforeEach() {
+        sudokuBoard = new SudokuBoard();
+    }
+
+    @AfterEach
+    void AfterEach() {
+        sudokuBoard = null;
     }
 
     @Test
     void solveSudokuDoesNotThrow() {
         Assertions.assertDoesNotThrow(() -> {
-            SudokuBoard board = new SudokuBoard();
-            board.fillBoard();
+            sudokuBoard.fillBoard();
         });
     }
 
     @Test
+    void getBoardTest() {
+        int[][] board = sudokuBoard.getBoard();
+        board[0][0] = 123;
+
+        int[][] board2 = sudokuBoard.getBoard();
+        board2[0][0] = -321;
+
+        assertNotEquals(board[0][0], board2[0][0]);
+    }
+
+    @Test
     void solveSudokuDoesntContainZero() {
-        SudokuBoard board = new SudokuBoard();
         Assertions.assertDoesNotThrow(() -> {
-            board.fillBoard();
+            sudokuBoard.fillBoard();
         });
 
-        for (int[] var : board.getBoard()) {
+        for (int[] var : sudokuBoard.getBoard()) {
             for (int num : var) {
-                System.out.print(String.format("%d ", num));
+                assertNotEquals(0, num);
             }
-            System.out.print('\n');
         }
     }
 
     @Test
     void genereateUniqueBoard() {
-        SudokuBoard board = new SudokuBoard();
-        board.fillBoard();
-        String out1 = board.getBoardString();
+        sudokuBoard.fillBoard();
+        String out1 = sudokuBoard.getBoardString();
         System.out.println(out1);
 
-        board.fillBoard();
-        String out2 = board.getBoardString();
+        sudokuBoard.fillBoard();
+        String out2 = sudokuBoard.getBoardString();
         System.out.println(out2);
 
         Assertions.assertNotEquals(out1, out2);
+    }
+
+    @Test
+    void testGetCell() {
+        int cell = sudokuBoard.getCell(0, 0);
+        cell = 1234;
+
+        int cell2 = sudokuBoard.getCell(0, 0);
+
+        assertNotEquals(cell, cell2);
+
     }
 
 }

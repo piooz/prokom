@@ -7,15 +7,20 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class SudokuBoard {
-    private int[][] board = new int[9][9];
+    private final int boardWidth = 9;
+    private int[][] board = new int[boardWidth][boardWidth];
     private int[] sequence = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    public SudokuBoard() {
-        shuffle();
+    public int getCell(int row, int col) {
+        return board[row][col];
     }
 
     public int[][] getBoard() {
-        int[][] copy = Arrays.copyOf(board, 9);
+        int[][] copy = new int [boardWidth][boardWidth];
+        for (int i = 0; i < boardWidth; i++) {
+            copy[i] = board[i].clone();
+        }
+
         return copy;
     }
 
@@ -24,16 +29,18 @@ public class SudokuBoard {
             Arrays.fill(var, 0);
         }
 
-        shuffle();
-        solveSudoku(9);
+        shuffle_sequence();
+        solveSudoku();
     }
 
-    public boolean solveSudoku(int n) {
+    public boolean solveSudoku() {
         int row = 0;
         int col = 0;
         boolean isEmpty = true;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+
+        // where should algorithm start
+        for (int i = 0; i < boardWidth; i++) {
+            for (int j = 0; j < boardWidth; j++) {
                 if (board[i][j] == 0) {
                     row = i;
                     col = j;
@@ -52,16 +59,12 @@ public class SudokuBoard {
             return true;
         }
 
-        // Else for each-row backtrack
-        // for (int num = 1; num <= n; num++) {
         for (int num : sequence) {
             if (isSafe(row, col, num)) {
                 board[row][col] = num;
-                if (solveSudoku(n)) {
-                    // print(board, n);
+                if (solveSudoku()) {
                     return true;
                 } else {
-                    // replace it
                     board[row][col] = 0;
                 }
             }
@@ -78,18 +81,16 @@ public class SudokuBoard {
         String out = new String("");
 
         for (int[] var : board) {
-            System.out.println(var);
             for (int num : var) {
                 out += String.valueOf(num);
-                out += ", ";
+                out += " ";
             }
             out += "\n";
         }
         return out;
     }
 
-    private void shuffle() {
-
+    private void shuffle_sequence() {
         List<Integer> sequenceList = Arrays.stream(sequence).boxed().collect(Collectors.toList());
         Collections.shuffle(sequenceList, new Random());
 
@@ -99,15 +100,12 @@ public class SudokuBoard {
     }
 
     private boolean isSafe(int row, int col, int num) {
-        // Row has the unique (row-clash)
         for (int d = 0; d < board.length; d++) {
-
             if (board[row][d] == num) {
                 return false;
             }
         }
 
-        // Column has the unique numbers (column-clash)
         for (int r = 0; r < board.length; r++) {
 
             if (board[r][col] == num) {
@@ -115,8 +113,6 @@ public class SudokuBoard {
             }
         }
 
-        // Corresponding square has
-        // unique number (box-clash)
         int sqrt = (int) Math.sqrt(board.length);
         int boxRowStart = row - row % sqrt;
         int boxColStart = col - col % sqrt;
@@ -128,7 +124,6 @@ public class SudokuBoard {
                 }
             }
         }
-        // if there is no clash, it's safe
         return true;
     }
 
