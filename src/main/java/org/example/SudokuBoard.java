@@ -16,7 +16,7 @@ public class SudokuBoard {
     }
 
     public int[][] getBoard() {
-        int[][] copy = new int [boardWidth][boardWidth];
+        int[][] copy = new int[boardWidth][boardWidth];
         for (int i = 0; i < boardWidth; i++) {
             copy[i] = board[i].clone();
         }
@@ -70,11 +70,6 @@ public class SudokuBoard {
             }
         }
         return false;
-    }
-
-    @Override
-    public String toString() {
-        return "SudokuBoard [board=" + Arrays.toString(board) + ", sequence=" + Arrays.toString(sequence) + "]";
     }
 
     public String getBoardString() {

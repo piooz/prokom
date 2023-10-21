@@ -1,15 +1,61 @@
 package org.example;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SudokuBoardTest {
 
     private SudokuBoard sudokuBoard;
+
+    private boolean isSafe(int[][] board, int row, int col, int num) {
+        for (int d = 0; d < board.length; d++) {
+            if (board[row][d] == num) {
+                return false;
+            }
+        }
+
+        for (int r = 0; r < board.length; r++) {
+
+            if (board[r][col] == num) {
+                return false;
+            }
+        }
+
+        int sqrt = (int) Math.sqrt(board.length);
+        int boxRowStart = row - row % sqrt;
+        int boxColStart = col - col % sqrt;
+
+        for (int r = boxRowStart; r < boxRowStart + sqrt; r++) {
+            for (int d = boxColStart; d < boxColStart + sqrt; d++) {
+                if (board[r][d] == num) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean testBoard(int[][] board) {
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                int buf = board[i][j];
+                board[i][j] = 0;
+                if (!isSafe(board, i, j, buf)) {
+                    System.out.println("Bad i: %d and %d board: %d".formatted(i, j, board[i][j]));
+                    return false;
+                }
+                board[i][j] = buf;
+            }
+
+        }
+        return true;
+    }
 
     @BeforeEach
     void beforeEach() {
@@ -17,7 +63,7 @@ public class SudokuBoardTest {
     }
 
     @AfterEach
-    void AfterEach() {
+    void afterEach() {
         sudokuBoard = null;
     }
 
@@ -53,13 +99,20 @@ public class SudokuBoardTest {
     }
 
     @Test
+    void checkCorrectness() {
+        sudokuBoard.fillBoard();
+        System.out.println(sudokuBoard.getBoardString());
+        assertTrue(testBoard(sudokuBoard.getBoard()));
+    }
+
+    @Test
     void genereateUniqueBoard() {
         sudokuBoard.fillBoard();
-        String out1 = sudokuBoard.getBoardString();
+        int[][] out1 = sudokuBoard.getBoard();
         System.out.println(out1);
 
         sudokuBoard.fillBoard();
-        String out2 = sudokuBoard.getBoardString();
+        int[][] out2 = sudokuBoard.getBoard();
         System.out.println(out2);
 
         Assertions.assertNotEquals(out1, out2);
@@ -73,7 +126,6 @@ public class SudokuBoardTest {
         int cell2 = sudokuBoard.getCell(0, 0);
 
         assertNotEquals(cell, cell2);
-
     }
 
 }
