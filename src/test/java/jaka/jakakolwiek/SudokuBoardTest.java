@@ -1,4 +1,4 @@
-package org.example;
+package jaka.jakakolwiek;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -82,7 +82,7 @@ public class SudokuBoardTest {
         SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
         int number = 3;
         sudokuBoard.set(0, 0, number);
-        Assertions.assertEquals(number, sudokuBoard.get(0,0));
+        Assertions.assertEquals(number, sudokuBoard.get(0, 0));
     }
 
     @Test

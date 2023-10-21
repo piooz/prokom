@@ -1,4 +1,4 @@
-package org.example;
+package jaka.jakakolwiek;
 
 import java.util.Arrays;
 
@@ -35,7 +35,6 @@ public class BacktrackSudokuSolverTest {
     }
 
     private boolean testBoard(int[][] board) {
-
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 int buf = board[i][j];
@@ -46,11 +45,9 @@ public class BacktrackSudokuSolverTest {
                 }
                 board[i][j] = buf;
             }
-
         }
         return true;
     }
-
 
     @Test
     void testSolveGeneratesDiffrentBoard() {
@@ -82,4 +79,3 @@ public class BacktrackSudokuSolverTest {
     }
 
 }
-

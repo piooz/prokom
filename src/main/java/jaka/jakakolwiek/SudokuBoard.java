@@ -1,4 +1,4 @@
-package org.example;
+package jaka.jakakolwiek;
 
 import java.util.Arrays;
 
