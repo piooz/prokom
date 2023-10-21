@@ -11,7 +11,7 @@ public class BacktrackSudokuSolver implements SudokuSolver {
     private final int boardWidth = 9;
     private int[] sequence = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    private void shuffle_sequence() {
+    private void shuffleSequence() {
         List<Integer> sequenceList = Arrays.stream(sequence).boxed().collect(Collectors.toList());
         Collections.shuffle(sequenceList, new Random());
 
@@ -22,7 +22,7 @@ public class BacktrackSudokuSolver implements SudokuSolver {
 
     @Override
     public void solve(int[][] board) {
-        shuffle_sequence();
+        shuffleSequence();
         solveSudoku(board);
 
     }

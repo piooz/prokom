@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 public class SudokuBoardTest {
 
-
     private class MockSolver implements SudokuSolver {
         private int uses = 0;
 
@@ -18,11 +17,10 @@ public class SudokuBoardTest {
         }
 
         @Override
-        public void solve(int[][] board) { 
+        public void solve(int[][] board) {
             uses++;
         }
     }
-
 
     @Test
     void getBoardTest() {
@@ -77,6 +75,20 @@ public class SudokuBoardTest {
         int cell2 = sudokuBoard.get(0, 0);
 
         assertNotEquals(cell, cell2);
+    }
+
+    @Test
+    void setTest() {
+        SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
+        int number = 3;
+        sudokuBoard.set(0, 0, number);
+        Assertions.assertEquals(number, sudokuBoard.get(0,0));
+    }
+
+    @Test
+    void toStringTest() {
+        SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
+        Assertions.assertNotNull(sudokuBoard.toString());
     }
 
 }

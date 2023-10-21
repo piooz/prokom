@@ -13,6 +13,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <developers>
+        <developer>
+            <id>236715</id>
+            <name>Piotr Zuchowski</name>
+            <email>236715@edu.p.lodz.pl</email>
+        </developer>
+    </developers>
+
+    <description>Projekt grupy laboratoryjnej mkw_cw_1200</description>
+
     <build>
         <plugins>
             <plugin>
@@ -90,6 +100,18 @@
 
     <reporting>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.21.0</version>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
