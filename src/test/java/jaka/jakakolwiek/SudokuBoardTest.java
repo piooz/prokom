@@ -1,6 +1,7 @@
 package jaka.jakakolwiek;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,7 +18,7 @@ public class SudokuBoardTest {
         }
 
         @Override
-        public void solve(int[][] board) {
+        public void solve(SudokuBoard board) {
             uses++;
         }
     }
@@ -89,6 +90,49 @@ public class SudokuBoardTest {
     void toStringTest() {
         SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
         Assertions.assertNotNull(sudokuBoard.toString());
+    }
+
+    @Test
+    void testEquals() {
+        SudokuSolver solver = new MockSolver();
+        SudokuBoard board1 = new SudokuBoard(solver);
+        SudokuBoard board2 = new SudokuBoard(solver);
+        board2.set(1,1,3);
+        assertFalse(board1 == board2);
+    }
+
+    @Test
+    void testEqualsObj() {
+        SudokuSolver solver = new MockSolver();
+        SudokuBoard board1 = new SudokuBoard(solver);
+        Object board2 = new Object();
+        assertFalse(board1 == board2);
+    }
+
+    @Test
+    void testEqualsNull() {
+        SudokuSolver solver = new MockSolver();
+        SudokuBoard board1 = new SudokuBoard(solver);
+        SudokuBoard board2 = null;
+        assertFalse(board1 == board2);
+    }
+
+    @Test
+    void testEqualsSameReferce() {
+        SudokuSolver solver = new MockSolver();
+        SudokuBoard board1 = new SudokuBoard(solver);
+        SudokuBoard board2 = board1;
+        assertTrue(board1 == board2);
+    }
+
+    @Test
+    void testHashCode() {
+        SudokuSolver solver = new MockSolver();
+        SudokuBoard board1 = new SudokuBoard(solver);
+        SudokuBoard board2 = new SudokuBoard(solver);
+        board2.set(1,1,3);
+        assertNotEquals(board2.hashCode(), board1.hashCode());
+
     }
 
 }

@@ -1,5 +1,5 @@
 package jaka.jakakolwiek;
 
 public interface SudokuSolver {
-    void solve(int[][] board);
+    void solve(SudokuBoard sudokuBoard);
 }

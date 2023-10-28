@@ -1,32 +1,34 @@
 package jaka.jakakolwiek;
 
-import java.util.Arrays;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 public class BacktrackSudokuSolverTest {
 
-    private boolean isSafe(int[][] board, int row, int col, int num) {
-        for (int d = 0; d < board.length; d++) {
-            if (board[row][d] == num) {
+    private boolean isSafe(SudokuBoard board, int row, int col, int num) {
+        int boardWidth = 9;
+        for (int d = 0; d < boardWidth; d++) {
+            if (board.get(row, d) == num) {
                 return false;
             }
         }
 
-        for (int r = 0; r < board.length; r++) {
+        for (int r = 0; r < boardWidth; r++) {
 
-            if (board[r][col] == num) {
+            if (board.get(r, col) == num) {
                 return false;
             }
         }
 
-        int sqrt = (int) Math.sqrt(board.length);
+        int sqrt = (int) Math.sqrt(boardWidth);
         int boxRowStart = row - row % sqrt;
         int boxColStart = col - col % sqrt;
 
         for (int r = boxRowStart; r < boxRowStart + sqrt; r++) {
             for (int d = boxColStart; d < boxColStart + sqrt; d++) {
-                if (board[r][d] == num) {
+                if (board.get(r, d) == num) {
                     return false;
                 }
             }
@@ -34,16 +36,18 @@ public class BacktrackSudokuSolverTest {
         return true;
     }
 
-    private boolean testBoard(int[][] board) {
+    private boolean testBoard(SudokuBoard board) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                int buf = board[i][j];
-                board[i][j] = 0;
+
+                int buf = board.get(i, j);
+                board.set(i, j, 0);
+
                 if (!isSafe(board, i, j, buf)) {
-                    System.out.println("Bad i: %d and %d board: %d".formatted(i, j, board[i][j]));
+                    System.out.println("Bad i: %d and %d board: %d".formatted(i, j, board));
                     return false;
                 }
-                board[i][j] = buf;
+                board.set(i, j, buf);
             }
         }
         return true;
@@ -52,30 +56,20 @@ public class BacktrackSudokuSolverTest {
     @Test
     void testSolveGeneratesDiffrentBoard() {
         BacktrackSudokuSolver solver = new BacktrackSudokuSolver();
+        SudokuBoard board = new SudokuBoard(solver);
+        SudokuBoard board2 = new SudokuBoard(solver);
 
-        int[][] board = new int[9][9];
-        for (int[] array : board) {
-            Arrays.fill(array, 0);
-        }
-        solver.solve(board);
+        board.solveGame();
+        board2.solveGame();
 
-        int[][] board2 = new int[9][9];
-        for (int[] array : board2) {
-            Arrays.fill(array, 0);
-        }
-        solver.solve(board2);
+        assertNotEquals(board, board2);
     }
 
     @Test
     void checkCorrectness() {
-        int[][] board = new int[9][9];
-        for (int[] array : board) {
-            Arrays.fill(array, 0);
-        }
-        BacktrackSudokuSolver solver = new BacktrackSudokuSolver();
-        solver.solve(board);
-        testBoard(board);
-
+        SudokuBoard board = new SudokuBoard(new BacktrackSudokuSolver());
+        board.solveGame();
+        assertTrue(testBoard(board));
     }
 
 }

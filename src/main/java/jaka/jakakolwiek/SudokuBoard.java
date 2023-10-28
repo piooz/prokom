@@ -30,8 +30,34 @@ public class SudokuBoard {
         return copy;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Arrays.deepHashCode(board);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        SudokuBoard other = (SudokuBoard) obj;
+        if (!Arrays.deepEquals(board, other.board)) {
+            return false;
+        }
+        return true;
+    }
+
     public void solveGame() {
-        sudokuSolver.solve(board);
+        sudokuSolver.solve(this);
     }
 
     @Override
