@@ -1,138 +1,100 @@
 package jaka.jakakolwiek;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import jaka.jakakolwiek.types.SudokuField;
+
+@ExtendWith(MockitoExtension.class)
 public class SudokuBoardTest {
 
-    private class MockSolver implements SudokuSolver {
-        private int uses = 0;
+    @Mock
+    SudokuSolver solver;
 
-        public int getUses() {
-            return uses;
-        }
+    SudokuField[][] board;
 
-        @Override
-        public void solve(SudokuBoard board) {
-            uses++;
-        }
-    }
-
-    @Test
-    void getBoardTest() {
-        SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
-        int[][] board = sudokuBoard.getBoard();
-        board[0][0] = 123;
-
-        int[][] board2 = sudokuBoard.getBoard();
-        board2[0][0] = -321;
-
-        assertNotEquals(board[0][0], board2[0][0]);
-    }
-
-    @Test
-    void solveSudokuDoesntContainZero() {
-        SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
-        for (int[] var : sudokuBoard.getBoard()) {
-            for (int num : var) {
-                assertEquals(0, num);
+    @BeforeEach
+    void beforeEach() {
+        board = new SudokuField[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                board[i][j] = new SudokuField();
             }
         }
     }
 
-    @Test
-    void isSudokuUsingSolver() {
-        MockSolver mock = new MockSolver();
-        SudokuBoard sudokuBoard = new SudokuBoard(mock);
-        sudokuBoard.solveGame();
-        assertTrue(mock.getUses() > 0);
+    @AfterEach
+    void afterEach() {
+        board = null;
     }
 
     @Test
-    void genereateUniqueBoard() {
-        SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
+    void isSudokuUsingSolver() {
+        Mockito.doNothing().when(solver).solve(Mockito.any(SudokuBoard.class));
+        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
         sudokuBoard.solveGame();
-        int[][] out1 = sudokuBoard.getBoard();
-        System.out.println(out1);
-
-        sudokuBoard.solveGame();
-        int[][] out2 = sudokuBoard.getBoard();
-        System.out.println(out2);
-
-        Assertions.assertNotEquals(out1, out2);
+        Mockito.verify(solver, Mockito.times(1)).solve(Mockito.any(SudokuBoard.class));
     }
 
     @Test
     void getTest() {
-        SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
-        int cell = sudokuBoard.get(0, 0);
-        cell = 1234;
+        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        int sudokuField = sudokuBoard.get(0, 0);
 
-        int cell2 = sudokuBoard.get(0, 0);
-
-        assertNotEquals(cell, cell2);
+        assertEquals(0, sudokuField);
     }
 
     @Test
     void setTest() {
-        SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
+        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+
         int number = 3;
         sudokuBoard.set(0, 0, number);
         Assertions.assertEquals(number, sudokuBoard.get(0, 0));
     }
 
-    @Test
-    void toStringTest() {
-        SudokuBoard sudokuBoard = new SudokuBoard(new MockSolver());
-        Assertions.assertNotNull(sudokuBoard.toString());
+    void setupboard(SudokuBoard board) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                board.set(i, j, j + 1);
+            }
+        }
     }
 
     @Test
-    void testEquals() {
-        SudokuSolver solver = new MockSolver();
-        SudokuBoard board1 = new SudokuBoard(solver);
-        SudokuBoard board2 = new SudokuBoard(solver);
-        board2.set(1,1,3);
-        assertFalse(board1 == board2);
+    void testGetBox() {
+        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        setupboard(sudokuBoard);
+
+        SudokuBox box = sudokuBoard.getBox(7, 1);
+        assertNotEquals(box, null);
     }
 
     @Test
-    void testEqualsObj() {
-        SudokuSolver solver = new MockSolver();
-        SudokuBoard board1 = new SudokuBoard(solver);
-        Object board2 = new Object();
-        assertFalse(board1 == board2);
+    void testGetColumn() {
+        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        setupboard(sudokuBoard);
+
+        SudokuColumn col = sudokuBoard.getColumn(5);
+        assertNotEquals(col, null);
+
     }
 
     @Test
-    void testEqualsNull() {
-        SudokuSolver solver = new MockSolver();
-        SudokuBoard board1 = new SudokuBoard(solver);
-        SudokuBoard board2 = null;
-        assertFalse(board1 == board2);
+    void testGetRow() {
+        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        setupboard(sudokuBoard);
+
+        SudokuRow row = sudokuBoard.getRow(5);
+        assertNotEquals(row, null);
     }
-
-    @Test
-    void testEqualsSameReferce() {
-        SudokuSolver solver = new MockSolver();
-        SudokuBoard board1 = new SudokuBoard(solver);
-        SudokuBoard board2 = board1;
-        assertTrue(board1 == board2);
-    }
-
-    @Test
-    void testHashCode() {
-        SudokuSolver solver = new MockSolver();
-        SudokuBoard board1 = new SudokuBoard(solver);
-        SudokuBoard board2 = new SudokuBoard(solver);
-        board2.set(1,1,3);
-        assertNotEquals(board2.hashCode(), board1.hashCode());
-
-    }
-
 }

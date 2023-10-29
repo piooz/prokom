@@ -27,31 +27,19 @@ public class BacktrackSudokuSolver implements SudokuSolver {
     }
 
     private boolean isSafe(SudokuBoard board, int row, int col, int num) {
-        for (int d = 0; d < boardWidth; d++) {
-            if (board.get(row, d) == num) {
-                return false;
-            }
+        board.set(row, col, num);
+
+        boolean isBoxValid = board.getBox(col, row).verify();
+        boolean isColumnValid = board.getColumn(col).verify();
+        boolean isRowValid = board.getRow(row).verify();
+
+        if (isBoxValid && isColumnValid && isRowValid) {
+            board.set(row, col, 0);
+            return true;
+        } else {
+            board.set(row, col, 0);
+            return false;
         }
-
-        for (int r = 0; r < boardWidth; r++) {
-
-            if (board.get(r, col) == num) {
-                return false;
-            }
-        }
-
-        int sqrt = (int) Math.sqrt(boardWidth);
-        int boxRowStart = row - row % sqrt;
-        int boxColStart = col - col % sqrt;
-
-        for (int r = boxRowStart; r < boxRowStart + sqrt; r++) {
-            for (int d = boxColStart; d < boxColStart + sqrt; d++) {
-                if (board.get(r, d) == num) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     private boolean solveSudoku(SudokuBoard board) {

@@ -1,77 +1,54 @@
 package jaka.jakakolwiek;
 
-import java.util.Arrays;
+import jaka.jakakolwiek.types.SudokuField;
 
 public class SudokuBoard {
     private SudokuSolver sudokuSolver;
-    private final int boardWidth = 9;
-    private int[][] board = new int[boardWidth][boardWidth];
+    private SudokuField[][] board;
 
-    public SudokuBoard(SudokuSolver sudokuSolver) {
-        for (int[] var : board) {
-            Arrays.fill(var, 0);
-        }
+    public SudokuBoard(SudokuSolver sudokuSolver, SudokuField[][] board) {
         this.sudokuSolver = sudokuSolver;
+        this.board = board;
     }
 
     public int get(int row, int col) {
-        return board[row][col];
+        return board[row][col].getFieldValue();
     }
 
     public void set(int row, int col, int num) {
-        board[row][col] = num;
+        board[row][col].setFieldValue(num);
     }
 
-    public int[][] getBoard() {
-        int[][] copy = new int[boardWidth][boardWidth];
-        for (int i = 0; i < boardWidth; i++) {
-            copy[i] = board[i].clone();
-        }
-        return copy;
+    public SudokuRow getRow(int y) {
+        return new SudokuRow(board[y]);
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Arrays.deepHashCode(board);
-        return result;
+    public SudokuColumn getColumn(int x) {
+        SudokuField[] array = new SudokuField[9];
+        for (int i = 0; i < 9; i++) {
+            array[i] = board[i][x];
+        }
+        return new SudokuColumn(array);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+    public SudokuBox getBox(int x, int y) {
+        SudokuField[] array = new SudokuField[9];
+
+        int sectionX = (x / 3) * 3;
+        int sectionY = (y / 3) * 3;
+        int index = 0;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                array[index] = board[sectionY + j][sectionX + i];
+                index++;
+            }
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        SudokuBoard other = (SudokuBoard) obj;
-        if (!Arrays.deepEquals(board, other.board)) {
-            return false;
-        }
-        return true;
+        return new SudokuBox(array);
     }
 
     public void solveGame() {
         sudokuSolver.solve(this);
-    }
-
-    @Override
-    public String toString() {
-        String out = new String("");
-
-        for (int[] var : board) {
-            for (int num : var) {
-                out += String.valueOf(num);
-                out += " ";
-            }
-            out += "\n";
-        }
-        return out;
     }
 
 }
