@@ -1,13 +1,19 @@
 package jaka.jakakolwiek;
 
+import jaka.jakakolwiek.nonesense.IObserver;
 import jaka.jakakolwiek.types.SudokuField;
 
-public abstract class SudokuSection {
+public abstract class SudokuSection implements IObserver<Integer> {
 
     SudokuField[] section;
 
     public SudokuSection(SudokuField[] section) {
         this.section = section;
+
+        // Subscribe every field
+        for (SudokuField field : section) {
+            field.addObserver(this);
+        }
     }
 
     public boolean verify() {
@@ -24,4 +30,10 @@ public abstract class SudokuSection {
         }
         return true;
     }
+
+    @Override
+    public void update(Integer event) {
+        verify();
+    }
+
 }

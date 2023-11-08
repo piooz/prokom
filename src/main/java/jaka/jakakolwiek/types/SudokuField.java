@@ -1,6 +1,8 @@
 package jaka.jakakolwiek.types;
 
-public class SudokuField {
+import jaka.jakakolwiek.nonesense.Observable;
+
+public class SudokuField extends Observable<Integer> {
     int value = 0;
 
     public SudokuField() {
@@ -20,6 +22,7 @@ public class SudokuField {
         }
 
         this.value = value;
+        this.notifyObservers(value);
     }
 
 }

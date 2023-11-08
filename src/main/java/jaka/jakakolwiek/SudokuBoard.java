@@ -51,4 +51,22 @@ public class SudokuBoard {
         sudokuSolver.solve(this);
     }
 
+    // private boolean checkBoard() {
+    // for (int i = 0; i < 9; i++) {
+    // if (!(getRow(i).verify() && getColumn(i).verify())) {
+    // return false;
+    // }
+    //
+    // if (!(i % 3 == 0 && getBox(i, i).verify())) {
+    // return false;
+    // }
+    // }
+    // return true;
+    // }
+    //
+    // @Override
+    // public void update(Integer event) {
+    // checkBoard();
+    // }
+
 }
