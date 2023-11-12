@@ -8,6 +8,13 @@
     <artifactId>prokom</artifactId>
     <version>0.1.0</version>
 
+    <licenses>
+      <license>
+        <name>Eclipse Public License - v 2.0</name>
+        <url>https://www.eclipse.org/legal/epl-v20.html</url>
+      </license>
+    </licenses>
+
     <properties>
         <java.version>20</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
