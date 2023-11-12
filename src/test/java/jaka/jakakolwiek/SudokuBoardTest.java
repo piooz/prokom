@@ -40,14 +40,14 @@ public class SudokuBoardTest {
     @Test
     void isSudokuUsingSolver() {
         Mockito.doNothing().when(solver).solve(Mockito.any(SudokuBoard.class));
-        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        SudokuBoard sudokuBoard = new SudokuBoard(solver);
         sudokuBoard.solveGame();
         Mockito.verify(solver, Mockito.times(1)).solve(Mockito.any(SudokuBoard.class));
     }
 
     @Test
     void getTest() {
-        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        SudokuBoard sudokuBoard = new SudokuBoard(solver);
         int sudokuField = sudokuBoard.get(0, 0);
 
         assertEquals(0, sudokuField);
@@ -55,7 +55,7 @@ public class SudokuBoardTest {
 
     @Test
     void setTest() {
-        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        SudokuBoard sudokuBoard = new SudokuBoard(solver);
 
         int number = 3;
         sudokuBoard.set(0, 0, number);
@@ -72,7 +72,7 @@ public class SudokuBoardTest {
 
     @Test
     void testGetBox() {
-        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        SudokuBoard sudokuBoard = new SudokuBoard(solver);
         setupboard(sudokuBoard);
 
         SudokuBox box = sudokuBoard.getBox(7, 1);
@@ -81,7 +81,7 @@ public class SudokuBoardTest {
 
     @Test
     void testGetColumn() {
-        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        SudokuBoard sudokuBoard = new SudokuBoard(solver);
         setupboard(sudokuBoard);
 
         SudokuColumn col = sudokuBoard.getColumn(5);
@@ -91,7 +91,7 @@ public class SudokuBoardTest {
 
     @Test
     void testGetRow() {
-        SudokuBoard sudokuBoard = new SudokuBoard(solver, board);
+        SudokuBoard sudokuBoard = new SudokuBoard(solver);
         setupboard(sudokuBoard);
 
         SudokuRow row = sudokuBoard.getRow(5);

@@ -56,19 +56,9 @@ public class BacktrackSudokuSolverTest {
 
     @Test
     void testSolveGeneratesDiffrentBoard() {
-        SudokuField[][] board1 = new SudokuField[9][9];
-        SudokuField[][] board2 = new SudokuField[9][9];
-
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                board1[i][j] = new SudokuField();
-                board2[i][j] = new SudokuField();
-            }
-        }
-
         BacktrackSudokuSolver solver = new BacktrackSudokuSolver();
-        SudokuBoard sudokuBoard = new SudokuBoard(solver, board1);
-        SudokuBoard sudokuBoard2 = new SudokuBoard(solver, board2);
+        SudokuBoard sudokuBoard = new SudokuBoard(solver);
+        SudokuBoard sudokuBoard2 = new SudokuBoard(solver);
 
         sudokuBoard.solveGame();
         sudokuBoard2.solveGame();
@@ -78,15 +68,7 @@ public class BacktrackSudokuSolverTest {
 
     @Test
     void checkCorrectness() {
-        SudokuField[][] board1 = new SudokuField[9][9];
-
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                board1[i][j] = new SudokuField();
-            }
-        }
-
-        SudokuBoard board = new SudokuBoard(new BacktrackSudokuSolver(), board1);
+        SudokuBoard board = new SudokuBoard(new BacktrackSudokuSolver());
         board.solveGame();
         assertTrue(testBoard(board));
     }

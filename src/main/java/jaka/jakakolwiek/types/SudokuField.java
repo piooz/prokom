@@ -3,7 +3,7 @@ package jaka.jakakolwiek.types;
 import jaka.jakakolwiek.nonesense.Observable;
 
 public class SudokuField extends Observable<Integer> {
-    int value = 0;
+    private int value = 0;
 
     public SudokuField() {
     }
